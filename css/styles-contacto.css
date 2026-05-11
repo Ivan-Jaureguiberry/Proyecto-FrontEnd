@@ -7,12 +7,12 @@
 .layout {
     display: grid;
     grid-template-columns: 350px 1fr;
-    grid-template-rows: 80px 1fr 60px;
-
+    grid-template-rows: 80px 1fr auto;
+    
     grid-template-areas: 
-        "menu header"
-        "content content"
-        "footer footer";
+    "menu header"
+    "content content"
+    "footer footer";
     
     height: 100vh;
 }
@@ -31,7 +31,7 @@
     position: absolute;
     left: 50%;
     transform: translate(-50%, -50%);
-
+    
     width: 200px;
     height: 100px;
     object-fit: cover;
@@ -53,6 +53,7 @@
 .content {
     grid-column: 1 / -1;
     padding: 20px 0;
+    background: #ffe0e3;
 }
 
 .content h2 {
@@ -81,22 +82,36 @@
     width: 50%;
 }
 
+.formulario h4 {
+    font-family: "Comic Neue", cursive;
+    margin-bottom: 15px;
+    padding-left: 3px;
+}
+
 .formulario form {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.formulario input,
-.formulario textarea {
+.formulario input {
     width: 100%;
     padding: 12px;
     border-radius: 8px;
     border: 1px solid #ccc;
 }
 
+.formulario textarea {
+    width: 100%;
+    height: 125px;
+    resize: vertical;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
 .formulario input[type="submit"] {
-    background: #ffb3c1;
+    background: lightgray;
     border: none;
     border-radius: 25px;
     padding: 12px;
@@ -111,7 +126,10 @@
 
 .formulario input[type="submit"]:hover {
     transform: scale(1.05);
+    background: #ffb3c1;
+    box-shadow: 0 6px 25px rgba(255, 179, 193, 0.9);
 }
+
 
 .info {
     display: flex;
@@ -120,26 +138,55 @@
     width: 50%;
 }
 
+.info h4 {
+    font-family: "Comic Neue", cursive;
+    margin-bottom: 2px;
+    padding-left: 3px;
+}
+
 .info iframe {
-    width: 100%;
-    height: 220px;
-    border-radius: 10px;
+    width: 75%;
+    height: 200px;
+    border-radius: 15px;
+
+    border: 2px solid #333;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
 .info p {
-    margin-bottom: 10px;
+    font-family: "Comic Neue", cursive;
+    padding-left: 3px;
 }
 
-.info svg {
-    margin-top: 10px;
+.item-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+}
+
+.item-info:hover {
+    transform: translateX(5px);
+    transition: 0.2s;
+}
+
+.item-info svg {
+    min-width: 24px;
 }
 
 .footer {
     grid-area: footer;
     background: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    padding: 30px 60px;
+    text-align: center;
+}
+
+.footer h3 {
+    margin-bottom: 15px;
+    font-family: "Comic Neue", cursive;
 }
 
 .flex-menu {
@@ -170,4 +217,65 @@
     transform: scale(1.0);
     box-shadow: 0 6px 25px rgba(255, 179, 193, 0.9);
     border-radius: 15px;
+}
+
+.menu-lista {
+    list-style: none;
+    padding: 0;
+}
+
+.menu-lista li {
+    margin-bottom: 5px;
+    overflow: visible;
+}
+
+.menu-lista a {
+    padding: 5px;
+    gap: 5px;
+    text-decoration: none;
+    color: black;
+}
+
+.menu-lista a:hover {
+    font-weight: bold;
+    background: #ffb3c1;
+    transform: scale(1.0);
+    box-shadow: 0 6px 25px rgba(255, 179, 193, 0.9);
+    border-radius: 10px;
+}
+
+.item-informacion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.metodos-de-pago {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.metodos-de-pago h3 {
+    width: 100%;
+}
+
+.metodos-de-pago img {
+    width: auto;
+    max-height: 25px;
+    margin: 2px;
+}
+
+.redes-sociales {
+    align-items: center;
+}
+
+.redes-sociales i {
+    font-size: 20px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.redes-sociales i:hover {
+    transform: scale(1.2);
 }
