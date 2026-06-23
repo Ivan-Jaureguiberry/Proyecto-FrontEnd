@@ -32,6 +32,12 @@ html {
     gap: 15px;
 }
 
+.hamburguesa {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+}
+
 .logo img{
     position: absolute;
     left: 50%;
@@ -373,6 +379,78 @@ html {
 
     .item-informacion p {
         font-size: 14px;
+    }
+}
+
+@media (max-width: 750px) {
+    .header {
+        position: relative;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+    }
+
+    .hamburguesa {
+        display: block;
+    }
+
+    .menu {
+        position: absolute;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background: white;
+        transform: translateY(-10px);
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+
+        z-index: 9999;
+    }
+
+    .menu.activo {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .flex-menu {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .flex-menu li {
+        width: 100%;
+    }
+
+    .flex-menu a {
+        padding: 15px;
+        font-size: 16px;
+    }
+
+    .grid-reseñas {
+        grid-template-columns: 150px 150px 150px;
+        gap: 10px;
+    }
+
+    .footer h3 {
+        font-size: 15px;
+    }
+
+    .menu-lista a {
+        font-size: 13px;
+    }
+
+    .item-informacion {
+        gap: 5px;
+    }
+
+    .item-informacion p {
+        font-size: 13px;
+    }
+
+    .redes-sociales i {
+        font-size: 18px;
     }
 }
 
