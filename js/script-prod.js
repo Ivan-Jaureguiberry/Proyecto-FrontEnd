@@ -10,12 +10,15 @@ const carritoMenu = document.getElementById("carritoMenu");
 
 carritoIcono.addEventListener("click", () => {
     carritoMenu.classList.toggle("activo");
+    menu.classList.remove("activo");
 });
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const botones = document.querySelectorAll(".boton-dos");
 const tbody = document.querySelector("#tablaCarrito tbody");
 const totalTexto = document.getElementById("total");
 const contadorCarrito = document.getElementById("contadorCarrito");
+const btnVaciar = document.getElementById("vaciarCarrito");
+const btnPagar = document.getElementById("pagarCarrito");
 
 let carrito = [];
 
@@ -25,6 +28,21 @@ if (carritoGuardado) {
     carrito = JSON.parse(carritoGuardado);
     actualizarTabla();
 }
+
+btnVaciar.addEventListener("click", () => {
+    carrito = [];
+    guardarCarrito();
+    actualizarTabla();
+    mostrarConfirmacion ("Carrito vaciado con éxito 🎉");
+});
+
+btnPagar.addEventListener("click", () => {
+    mostrarConfirmacion ("Compra realizada con éxito 🎉");
+
+    carrito = [];
+    guardarCarrito();
+    actualizarTabla();
+});
 
 botones.forEach((boton) => {
     boton.addEventListener("click", () => {
@@ -52,7 +70,18 @@ botones.forEach((boton) => {
         actualizarTabla();
     });
 });
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+document.addEventListener("click", (e) => {
+    const clickDentroMenu = carritoMenu.contains(e.target);
+    const clickEnIcono = carritoIcono.contains(e.target);
+    const clickEnEliminar = e.target.classList.contains("eliminar");
+    const clickEnAgregar = e.target.classList.contains("boton-dos");
 
+    if (!clickDentroMenu && !clickEnIcono && !clickEnAgregar && !clickEnEliminar) {
+        carritoMenu.classList.remove("activo");
+    }
+});
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function formatearPrecio(numero) {
     let numStr = numero.toFixed(2);
 
@@ -76,8 +105,11 @@ function formatearPrecio(numero) {
 
     return resultado + "," + decimales;
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function actualizarTabla() {
+    const btnPagar = document.getElementById("pagarCarrito");
+    const btnVaciar = document.getElementById("vaciarCarrito");
+
     tbody.innerHTML = "";
 
     let total = 0;
@@ -97,6 +129,7 @@ function actualizarTabla() {
             carrito.splice(index, 1);
             guardarCarrito();
             actualizarTabla();
+            mostrarConfirmacion("Producto eliminado con éxito 🎉");
         });
 
         tbody.appendChild(fila);
@@ -106,8 +139,33 @@ function actualizarTabla() {
 
     totalTexto.textContent = "Total: $" + formatearPrecio(total);
     contadorCarrito.textContent = carrito.length;
-}
 
+    btnPagar.disabled = carrito.length === 0;
+    btnVaciar.disabled = carrito.length === 0;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function guardarCarrito() {
     localStorage.setItem("carrito", JSON.stringify(carrito));
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function mostrarConfirmacion (mensaje) {
+    document.querySelectorAll(".confirmacion").forEach(n => n.remove());
+
+    const notificacion = document.createElement("div");
+    notificacion.classList.add("confirmacion");
+    notificacion.textContent = mensaje;
+
+    document.body.appendChild(notificacion);
+
+    setTimeout (() => {
+        notificacion.classList.add("mostrar");
+    }, 10);
+
+    setTimeout(() => {
+        notificacion.classList.remove("mostrar");
+
+        setTimeout(() => {
+            notificacion.remove();
+        }, 400);
+    }, 2500);
 }

@@ -48,11 +48,177 @@ html {
     object-fit: cover;
 }
 
+.header-icon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .header-icon svg:hover {
     background: #ffb3c1;
     transform: scale(1.1);
     box-shadow: 0 6px 25px rgba(255, 179, 193, 0.9);
     border-radius: 15px;
+}
+
+.contador {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: red;
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 50%;
+}
+
+.carrito-icono {
+    position: relative;
+}
+
+.carrito-icono:hover {
+    cursor: pointer;
+}
+
+.carrito-menu {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    width: 320px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    padding: 15px;
+    display: none;
+    z-index: 1000;
+    
+    font-family: 'Inter', sans-serif;
+
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: all 0.25s ease;
+}
+
+.carrito-menu.activo {
+    display: block;
+    transform: translateY(0);
+    opacity: 1;
+}
+
+#tablaCarrito {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+#tablaCarrito thead {
+    background: #f5f5f5;
+}
+
+#tablaCarrito th {
+    text-align: left;
+    padding: 8px;
+    font-size: 13px;
+    color: #555;
+}
+
+#tablaCarrito td {
+    padding: 8px;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+#tablaCarrito tbody {
+    display: block;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#tablaCarrito tbody tr:hover {
+    background: #fafafa;
+}
+
+#tablaCarrito thead,
+#tablaCarrito tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.eliminar {
+    background: #e91e63;
+    border: none;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.eliminar:hover {
+    background: #e60000;
+}
+
+#total {
+    text-align: right;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.carritoBotones {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btnCarrito {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 25px;
+    font-family: "Comic Neue", cursive;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#vaciarCarrito {
+    background: #ffd6d6;
+    color: #b00020;
+}
+
+#vaciarCarrito:hover {
+    background: #ffb3b3;
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(255, 0, 0, 0.3);
+}
+
+#pagarCarrito {
+    background: #d6ffd9;
+    color: #0a7a2f;
+}
+
+#pagarCarrito:hover {
+    background: #b3ffc2;
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(0, 255, 100, 0.3);
+}
+
+#pagarCarrito:disabled, #vaciarCarrito:disabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.animar {
+    transform: scale(0.9);
+    transition: 0.2s;
 }
 
 .menu {
@@ -209,9 +375,10 @@ html {
 .flex-menu {
     display: flex;
     flex-direction: row;
-    gap: 5px;
+    gap: 10px;
+    width: 100%;
     list-style: none;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
 }
 
@@ -289,6 +456,46 @@ html {
 }
 
 .redes-sociales i:hover {
+    transform: scale(1.2);
+}
+
+.confirmacion {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #d6ffd9;
+    color: #0a7a2f;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-family: "Inter", sans-serif;
+    font-weight: bold;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-width: 220px;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.confirmacion.mostrar {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.confirmacion button {
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #0a7a2f;
+}
+
+.confirmacion button:hover {
     transform: scale(1.2);
 }
 
@@ -421,16 +628,12 @@ html {
 
     .flex-menu li {
         width: 100%;
+        text-align: center;
     }
 
     .flex-menu a {
         padding: 15px;
         font-size: 16px;
-    }
-
-    .grid-reseñas {
-        grid-template-columns: 150px 150px 150px;
-        gap: 10px;
     }
 
     .footer h3 {
