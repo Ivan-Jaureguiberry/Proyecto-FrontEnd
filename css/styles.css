@@ -454,6 +454,14 @@ html {
     border-radius: 15px;
 }
 
+hr {
+    height: 1px;
+    display: grid;
+    grid-column: 1 / -1;
+    border-color: gray;
+    opacity: 0.1;
+}
+
 .grid-reseñas {
     display: grid;
     grid-column: 1 / -1;
