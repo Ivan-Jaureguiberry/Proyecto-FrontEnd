@@ -12,6 +12,8 @@ Funcionalidades principales:
 - Diseño Responsive
 - Implementación de Grid y Flexbox
 - Media Queries para distintos tamaños de pantalla
+- JS implementado
+- Carrito funcional
 
 Estructura del sitio:
 
