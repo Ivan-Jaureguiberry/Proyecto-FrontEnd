@@ -30,6 +30,11 @@ productos.forEach(productoDiv => {
     const h4 = productoDiv.querySelector("h4");
     const stockTexto = productoDiv.querySelector(".stock");
 
+    console.log("PRODUCTO:", nombre);
+    console.log("H4:", h4);
+    console.log("DATA STOCK:", h4?.dataset.stock);
+    console.log("STOCK GUARDADO:", stockProductos[nombre]);
+
     if (stockProductos[nombre] === undefined) {
         stockProductos[nombre] = parseInt(h4.dataset.stock);
     }
