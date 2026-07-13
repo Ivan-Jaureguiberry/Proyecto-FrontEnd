@@ -15,6 +15,13 @@ carritoIcono.addEventListener("click", () => {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const botones = document.querySelectorAll(".boton-dos");
 
+const versionStock = "v2";
+
+if (localStorage.getItem("versionStock") !== versionStock) {
+    localStorage.removeItem("stockProductos");
+    localStorage.setItem("versionStock", versionStock);
+}
+
 let stockProductos = JSON.parse(localStorage.getItem("stockProductos")) || {};
 const productos = document.querySelectorAll(".publicacion");
 
