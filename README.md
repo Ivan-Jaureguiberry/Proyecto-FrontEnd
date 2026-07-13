@@ -14,6 +14,7 @@ Funcionalidades principales:
 - Media Queries para distintos tamaños de pantalla
 - JS implementado
 - Carrito funcional
+- Control de Stock
 
 Estructura del sitio:
 
