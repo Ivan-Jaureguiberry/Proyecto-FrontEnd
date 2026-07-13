@@ -35,7 +35,7 @@ productos.forEach(productoDiv => {
     console.log("DATA STOCK:", h4?.dataset.stock);
     console.log("STOCK GUARDADO:", stockProductos[nombre]);
 
-    if (stockProductos[nombre] === undefined) {
+    if (stockProductos[nombre] === undefined || stockProductos[nombre] === null) {
         stockProductos[nombre] = parseInt(h4.dataset.stock);
     }
 
