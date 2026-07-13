@@ -152,6 +152,8 @@ html {
 }
 
 .eliminar {
+    display: block;
+    margin-left: auto;
     background: #e91e63;
     border: none;
     color: white;
@@ -337,7 +339,6 @@ html {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-
 .publicacion:hover .descripcion{
     transform: translateY(0);
     transition: 0.3s;
@@ -375,7 +376,6 @@ html {
     transform: scale(1.1);
     box-shadow: 0 6px 25px rgba(255, 179, 193, 0.9);
 }
-
 
 .boton-dos, .boton-ir {
     margin-top: 50px;
@@ -573,8 +573,8 @@ hr {
     position: fixed;
     top: 20px;
     right: 20px;
-    background: #d6ffd9;
-    color: #0a7a2f;
+    background: white;
+    color: black;
     padding: 12px 20px;
     border-radius: 12px;
     font-family: "Inter", sans-serif;
@@ -607,6 +607,27 @@ hr {
 
 .confirmacion button:hover {
     transform: scale(1.2);
+}
+
+.contenedor-cantidad {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mas, .menos {
+    background: #ffb3c1;
+    border: none;
+    padding: 4px 8px;
+    margin: 0 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.mas:hover, .menos:hover {
+    background: #ff8fa3;
 }
 
 @media (min-width: 1400px) {

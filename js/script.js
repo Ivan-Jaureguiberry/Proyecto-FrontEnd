@@ -14,6 +14,28 @@ carritoIcono.addEventListener("click", () => {
 });
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const botones = document.querySelectorAll(".boton-dos");
+
+let stockProductos = JSON.parse(localStorage.getItem("stockProductos")) || {};
+const productos = document.querySelectorAll(".publicacion");
+
+productos.forEach(productoDiv => {
+    const nombre = productoDiv.querySelector("h3").textContent;
+    const h4 = productoDiv.querySelector("h4");
+    const stockTexto = productoDiv.querySelector(".stock");
+
+    if (stockProductos[nombre] === undefined) {
+        stockProductos[nombre] = parseInt(h4.dataset.stock);
+    }
+
+    h4.dataset.stock = stockProductos[nombre];
+
+    if (stockTexto) {
+        stockTexto.textContent = "Stock disponible: " + stockProductos[nombre];
+    }
+});
+
+guardarStock();
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const tbody = document.querySelector("#tablaCarrito tbody");
 const totalTexto = document.getElementById("total");
 const contadorCarrito = document.getElementById("contadorCarrito");
@@ -30,41 +52,67 @@ if (carritoGuardado) {
 }
 
 btnVaciar.addEventListener("click", () => {
+    carrito.forEach(producto => {
+        stockProductos[producto.nombre] += producto.cantidad;
+    });
+
+    guardarStock();
+
     carrito = [];
     guardarCarrito();
     actualizarTabla();
+
     mostrarConfirmacion ("Carrito vaciado con éxito 🎉");
 });
 
 btnPagar.addEventListener("click", () => {
-    mostrarConfirmacion ("Compra realizada con éxito 🎉");
-
+    guardarStock();
+    
     carrito = [];
     guardarCarrito();
     actualizarTabla();
+
+    mostrarConfirmacion ("Compra realizada con éxito 🎉");
 });
 
 botones.forEach((boton) => {
     boton.addEventListener("click", () => {
         const productoDiv = boton.parentElement.parentElement;
+        const nombre = productoDiv.querySelector("h3").textContent;    
+        const h4 = productoDiv.querySelector("h4");
+        const stockTexto = productoDiv.querySelector(".stock");
+        
+        let stock = parseInt(h4.dataset.stock);
 
-        const nombre = productoDiv.querySelector("h3").textContent;
-        const precioTexto = productoDiv.querySelector("h4").textContent;
-
+        if (stock <= 0) {
+            mostrarConfirmacion("Sin stock ❌");
+            return;
+        }
+        
+        const precioTexto = h4.textContent;
         const precio = parseFloat(precioTexto.replace("Precio: $", "").replace(".", "").replace(",", "."));
+        
+        const existente = carrito.find(p => p.nombre === nombre);
 
-        const producto = {
-            nombre: nombre,
-            precio: precio
-        };
+        if (existente) {
+            existente.cantidad++;
+        }
+        else {
+            carrito.push({
+                nombre: nombre,
+                precio: precio,
+                cantidad: 1
+            });
+        }
 
-        carrito.push(producto);
+        stockProductos[nombre]--;
+        guardarStock();
+
+        h4.dataset.stock = stockProductos[nombre];
+        stockTexto.textContent = "Stock disponible: " + stockProductos[nombre];
 
         boton.classList.add("animar");
-
-        setTimeout(() => {
-            boton.classList.remove("animar");
-        }, 200);
+        setTimeout(() => boton.classList.remove("animar"), 200);
 
         guardarCarrito();
         actualizarTabla();
@@ -75,8 +123,11 @@ document.addEventListener("click", (e) => {
     const clickDentroMenu = carritoMenu.contains(e.target);
     const clickEnIcono = carritoIcono.contains(e.target);
     const clickEnEliminar = e.target.classList.contains("eliminar");
+    const clickEnAgregar = e.target.classList.contains("boton-dos");
+    const clickEnMenos = e.target.classList.contains("menos");
+    const clickEnMas = e.target.classList.contains("mas");
 
-    if (!clickDentroMenu && !clickEnIcono && !clickEnEliminar) {
+    if (!clickDentroMenu && !clickEnIcono && !clickEnAgregar && !clickEnEliminar && !clickEnMenos && !clickEnMas) {
         carritoMenu.classList.remove("activo");
     }
 });
@@ -118,35 +169,101 @@ function actualizarTabla() {
 
         fila.innerHTML = `
             <td>${producto.nombre}</td>
-            <td>$${formatearPrecio(producto.precio)}</td>
+            <td>
+                <div class="contenedor-cantidad">
+                    <button class="menos">-</button>
+                    x${producto.cantidad}
+                    <button class="mas">+</button>
+                </div>
+            </td>
+            <td>$${formatearPrecio(producto.precio * producto.cantidad)}</td>
             <td><button class = "eliminar">X</button></td>
         `;
+
+        const btnMas = fila.querySelector(".mas");
+        const btnMenos = fila.querySelector(".menos");
+
+        btnMas.addEventListener("click", () => {
+            if (stockProductos[producto.nombre] > 0) {
+                producto.cantidad++;
+                
+                stockProductos[producto.nombre]--;
+                guardarStock();
+                guardarCarrito();
+
+                actualizarTabla();
+            }
+            else {
+                mostrarConfirmacion("No hay más stock");
+            }
+        });
+
+        btnMenos.addEventListener("click", () => {
+            if (producto.cantidad > 1) {
+                producto.cantidad--;
+
+                stockProductos[producto.nombre]++;
+            }
+            else {
+                stockProductos[producto.nombre]++;
+                carrito = carrito.filter(p => p.nombre !== producto.nombre);
+            }
+
+            guardarStock();
+            guardarCarrito();
+            actualizarTabla();
+        });
 
         const btnEliminar = fila.querySelector(".eliminar");
 
         btnEliminar.addEventListener("click", () => {
+            stockProductos[producto.nombre] += producto.cantidad;
+
             carrito.splice(index, 1);
+
+            guardarStock();
             guardarCarrito();
             actualizarTabla();
+
             mostrarConfirmacion("Producto eliminado con éxito 🎉");
         });
 
         tbody.appendChild(fila);
 
-        total += producto.precio;
+        total += producto.precio * producto.cantidad;
     });
 
     totalTexto.textContent = "Total: $" + formatearPrecio(total);
-    contadorCarrito.textContent = carrito.length;
+    const cantidadTotal = carrito.reduce((total, producto) => {
+        return total + producto.cantidad;
+    }, 0);
 
-    btnPagar.disabled = carrito.length === 0;
-    btnVaciar.disabled = carrito.length === 0;
+    contadorCarrito.textContent = cantidadTotal;
+
+    btnPagar.disabled = cantidadTotal === 0;
+    btnVaciar.disabled = cantidadTotal === 0;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function guardarCarrito() {
     localStorage.setItem("carrito", JSON.stringify(carrito));
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function actualizarStockVisual(nombreProducto) {
+    const productos = document.querySelectorAll(".publicacion");
+
+    productos.forEach(prod => {
+        const nombre = prod.querySelector("h3").textContent;
+
+        if (nombre === nombreProducto) {
+            const h4 = prod.querySelector("h4");
+            const stockTexto = prod.querySelector(".stock");
+
+            h4.dataset.stock = stockProductos[nombreProducto];
+            stockTexto.textContent = "Stock disponible: " + stockProductos[nombreProducto];
+        }
+    });
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const reseñas = document.querySelectorAll(".reseña");
 const contenedor = document.querySelector(".grid-reseñas");
 
@@ -232,4 +349,8 @@ function mostrarConfirmacion (mensaje) {
             notificacion.remove();
         }, 400);
     }, 2500);
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function guardarStock() {
+    localStorage.setItem("stockProductos", JSON.stringify(stockProductos));
 }

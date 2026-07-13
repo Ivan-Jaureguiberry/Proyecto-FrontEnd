@@ -147,6 +147,8 @@ html {
 }
 
 .eliminar {
+    display: block;
+    margin-left: auto;
     background: #e91e63;
     border: none;
     color: white;
@@ -497,6 +499,27 @@ html {
 
 .confirmacion button:hover {
     transform: scale(1.2);
+}
+
+.contenedor-cantidad {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mas, .menos {
+    background: #ffb3c1;
+    border: none;
+    padding: 4px 8px;
+    margin: 0 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.mas:hover, .menos:hover {
+    background: #ff8fa3;
 }
 
 @media (min-width: 1400px) {
